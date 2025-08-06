@@ -1,4 +1,4 @@
-FROM openjdk:21-jdk-slim
+FROM eclipse-temurin:21-jdk
 
 WORKDIR /app
 
@@ -9,18 +9,21 @@ COPY pom.xml .
 COPY synapse-core/pom.xml synapse-core/
 COPY ingestion-api/pom.xml ingestion-api/
 
+# Make Maven wrapper executable
+RUN chmod +x ./mvnw
+
 # Download dependencies
-RUN ./mvnw dependency:go-offline
+RUN ./mvnw dependency:go-offline -B
 
 # Copy source code
 COPY synapse-core/src synapse-core/src
 COPY ingestion-api/src ingestion-api/src
 
 # Build the application
-RUN ./mvnw clean package -pl ingestion-api -am -DskipTests
+RUN ./mvnw clean package -pl ingestion-api -am -DskipTests -B
 
 # Create runtime image
-FROM openjdk:21-jre-slim
+FROM eclipse-temurin:21-jre
 
 RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
 
