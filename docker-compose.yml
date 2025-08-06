@@ -1,0 +1,69 @@
+version: '3.8'
+
+services:
+  # PostgreSQL with pgvector extension
+  postgres:
+    image: pgvector/pgvector:pg16
+    container_name: synapse-postgres
+    environment:
+      POSTGRES_DB: synapse
+      POSTGRES_USER: synapse
+      POSTGRES_PASSWORD: synapse
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database/schema:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U synapse -d synapse"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - synapse-network
+
+  # Ingestion API Service
+  ingestion-api:
+    build:
+      context: .
+      dockerfile: ingestion-api/Dockerfile
+    container_name: synapse-ingestion-api
+    ports:
+      - "8081:8081"
+    environment:
+      DATABASE_URL: jdbc:postgresql://postgres:5432/synapse
+      DATABASE_USERNAME: synapse
+      DATABASE_PASSWORD: synapse
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - synapse-network
+    profiles:
+      - services
+
+  # Slack Connector Service
+  slack-connector:
+    build:
+      context: .
+      dockerfile: connector-slack/Dockerfile
+    container_name: synapse-slack-connector
+    ports:
+      - "8082:8082"
+    environment:
+      SLACK_BOT_TOKEN: ${SLACK_BOT_TOKEN}
+      SLACK_CHANNEL_ID: ${SLACK_CHANNEL_ID}
+      INGESTION_API_URL: http://ingestion-api:8081
+    depends_on:
+      - ingestion-api
+    networks:
+      - synapse-network
+    profiles:
+      - services
+
+volumes:
+  postgres_data:
+
+networks:
+  synapse-network:
+    driver: bridge
