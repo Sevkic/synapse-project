@@ -3,7 +3,7 @@
 echo "🐘 Starting PostgreSQL for development..."
 
 # Start only PostgreSQL
-docker-compose up postgres -d
+docker compose up postgres -d
 
 echo "⏳ Waiting for PostgreSQL to be ready..."
 sleep 5
@@ -17,6 +17,6 @@ echo "  # In another terminal:"
 echo "  cd connector-slack && ../mvnw spring-boot:run"
 echo ""
 echo "📋 Database connection:"
-echo "  URL: jdbc:postgresql://localhost:5432/synapse"
+echo "  URL: jdbc:postgresql://localhost:5433/synapse"
 echo "  Username: synapse"
 echo "  Password: synapse"

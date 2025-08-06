@@ -8,7 +8,7 @@ spring:
     name: synapse-ingestion-api
   
   datasource:
-    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/synapse}
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5433/synapse}
     username: ${DATABASE_USERNAME:synapse}
     password: ${DATABASE_PASSWORD:synapse}
     driver-class-name: org.postgresql.Driver

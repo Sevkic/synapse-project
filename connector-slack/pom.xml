@@ -35,7 +35,7 @@
         </dependency>
         <dependency>
             <groupId>com.slack.api</groupId>
-            <artifactId>bolt-spring-boot-starter</artifactId>
+            <artifactId>slack-api-client</artifactId>
             <version>1.39.3</version>
         </dependency>
     </dependencies>

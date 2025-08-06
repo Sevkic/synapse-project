@@ -4,11 +4,11 @@ echo "🚀 Building and starting Synapse project..."
 
 # Stop any running containers
 echo "🛑 Stopping existing containers..."
-docker-compose down
+docker compose down
 
 # Build and start everything
 echo "🔨 Building and starting all services..."
-docker-compose --profile services up --build
+docker compose --profile services up --build
 
 echo "✅ All services should be running now!"
 echo ""
