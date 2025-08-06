@@ -60,6 +60,25 @@ services:
     profiles:
       - services
 
+  # GitHub Connector Service
+  github-connector:
+    build:
+      context: .
+      dockerfile: connector-github/Dockerfile
+    container_name: synapse-github-connector
+    ports:
+      - "8083:8083"
+    environment:
+      GITHUB_TOKEN: ${GITHUB_TOKEN}
+      GITHUB_USERNAME: ${GITHUB_USERNAME}
+      INGESTION_API_URL: http://ingestion-api:8081
+    depends_on:
+      - ingestion-api
+    networks:
+      - synapse-network
+    profiles:
+      - services
+
 volumes:
   postgres_data:
 

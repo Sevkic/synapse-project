@@ -1,0 +1,30 @@
+server:
+  port: 8083
+
+spring:
+  application:
+    name: synapse-github-connector
+
+github:
+  token: ${GITHUB_TOKEN:your-github-token-here}
+  username: ${GITHUB_USERNAME:sevkic}
+
+synapse:
+  ingestion-api:
+    url: ${INGESTION_API_URL:http://localhost:8081}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: when-authorized
+
+logging:
+  level:
+    com.synapse: DEBUG
+    org.kohsuke.github: INFO
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
